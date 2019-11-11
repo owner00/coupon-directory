@@ -1,5 +1,5 @@
 const contractSource = '
-    payable contract CouponDirectory =
+    contract CouponDirectory =
     
         record coupon = 
             { 
@@ -45,7 +45,7 @@ const contractSource = '
             else
                 abort("Coupon no longer available!")
 ';
-const contractAddress = 'ct_xP4F5Q9nzY3pABNbW9v2qurcAV7EWZK1p1zCa7exUQJ4GTNHs';
+const contractAddress = 'ct_2T4562sqNRsQze6hbNuscg7vx31GNuPAn2cTsyRB4y2AF7n4eV';
 var client = null;
 var couponArray = [];
 var couponsLength = 0;
