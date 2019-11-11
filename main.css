@@ -1,5 +1,5 @@
 body{
-    background-color: #311B58;
+    background-color: wheat;
     padding: 1em;
 }
 
@@ -26,7 +26,7 @@ img{
 
 #loader{
     margin: 1em;
-    color: #F7296E;
+    color: burlywood;
     display: none;
 }
 
@@ -36,8 +36,8 @@ img{
 }
 
 .btn{
-    background-color: #F7296E;
-    border-color: #F7296E;
+    background-color: burlywood;
+    border-color: darkgray;
     color: white;
     margin-top: 1em;
 }
