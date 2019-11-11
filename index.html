@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <title>Coupon Directory</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-sm-12 text-center div-center">
+
+                <div id="title-div">
+                    <img src="img/coupon.png">
+                    <h1>Coupon Directory</h1>
+                </div>
+
+                <div id="message">
+                    <div id="loader" class="alert alert-secondary">
+                        <img src="img/loading.gif">
+                        <div><b>LOADING</b></div>
+                    </div>
+                </div>
+
+                <div>
+                    <form>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regName" class="form-control" placeholder="Your user name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regTitle" class="form-control" placeholder="Coupon Info">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regValue" class="form-control" placeholder="Coupon Code">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regUrl" class="form-control" placeholder="Site url">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regUses" class="form-control"
+                                    placeholder="How many times can this be used?">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regValid" class="form-control"
+                                    placeholder="How long is this Valid(days)">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" id="regAmount" class="form-control"
+                                    placeholder="How much to view?(ae)">
+                            </div>
+                        </div>
+                    </form>
+
+                    <button id="submitBtn" class="btn btn-block">Submit Coupon!</button>
+                </div>
+
+                <div id="couponBody">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="template" type="x-tmpl-mustache">
+        {{#couponArray}}
+            <div class="card">
+                <h5 class="card-title">{{couponTitle}}</h5>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text muted">From: {{userName}} </h6>
+                    <h6 class="card-subtitle mb-2 text muted">Validity Period: {{validity}} (hr)</h6>
+                    <h6 class="card-subtitle mb-2 text muted">Remaining Uses: {{uses}} </h6>
+                    <h6 class="card-subtitle mb-2 text muted">Amount: {{amount}} (ae)</h6>
+                    <button class="btn getBtn btn-block" id=1>GETT!</button>
+                </div>
+            </div>
+        {{/couponArray}}
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/dacadeorg/aeternity-development-101/resources/aepp-sdk.browser.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.js">
+    </script>
+    <script src="index.js">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
