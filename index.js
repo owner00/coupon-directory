@@ -1,5 +1,5 @@
 const contractSource = `
-    contract CouponDirectory =
+    payable contract CouponDirectory =
     
         record coupon = 
             { 
