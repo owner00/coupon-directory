@@ -44,65 +44,71 @@ const contractSource = `
             abort("Coupon no longer available!")
 `;
 
-const contractAddress = 'ct_2T4562sqNRsQze6hbNuscg7vx31GNuPAn2cTsyRB4y2AF7n4eV';
+const contractAddress = "ct_2T4562sqNRsQze6hbNuscg7vx31GNuPAn2cTsyRB4y2AF7n4eV";
 var client = null;
 var couponArray = [];
 var couponsLength = 0;
 
-function renderCoupons(){
-  couponArray = couponArray.sort(function(a,b){return a.uses-b.uses})
-  var template = $('#template').html();
+function renderCoupons() {
+  couponArray = couponArray.sort(function(a, b) {
+    return a.uses - b.uses;
+  });
+  var template = $("#template").html();
   Mustache.parse(template);
-  var rendered = Mustache.render(template, {couponArray});
-  $('#couponBody').html(rendered);
+  var rendered = Mustache.render(template, { couponArray });
+  $("#couponBody").html(rendered);
 }
 
-window.addEventListener('load', async () => {
+window.addEventListener("load", async () => {
   $("#loader").show();
 
   client = await Ae.Aepp();
 
-  const contract = await client.getContractInstance(contractSource, {contractAddress});
-  const calledGet = await contract.call('getTotalCoupons', [], {callStatic: true}).catch(e => console.error(e));
-  console.log('calledGet', calledGet);
+  const contract = await client.getContractInstance(contractSource, {
+    contractAddress
+  });
+  const calledGet = await contract
+    .call("getTotalCoupons", [], { callStatic: true })
+    .catch(e => console.error(e));
+  console.log("calledGet", calledGet);
 
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
-  console.log('decodedGet', decodedGet);
-
+  console.log("decodedGet", decodedGet);
 
   renderCoupons();
 
   $("#loader").hide();
 });
 
-jQuery("#couponBody").on("click", ".getBtn", async function(event){
+jQuery("#couponBody").on("click", ".getBtn", async function(event) {
   const dataIndex = event.target.id;
   const foundIndex = couponArray.findIndex(coupon => coupon.index == dataIndex);
-  if(couponArray[foundIndex].uses < 1){
-      alert("Coupon no longer available!"); }
-  else{
-      alert(couponArray[foundIndex].couponValue)
-      couponArray[foundIndex].uses = couponArray[foundIndex].uses - 1;
-      renderCoupons();  }
+  if (couponArray[foundIndex].uses < 1) {
+    alert("Coupon no longer available!");
+  } else {
+    alert(couponArray[foundIndex].couponValue);
+    couponArray[foundIndex].uses = couponArray[foundIndex].uses - 1;
+    renderCoupons();
+  }
 });
 
-$('#submitBtn').click(async function(){
-  var name = ($('#regName').val()),
-      summary = ($('#regTitle').val()),
-      cpnCode = ($('#regValue').val()),
-      siteUrl = ($('#regUrl').val())
-      noUses = ($('#regUses').val()),
-      validFr = ($('#regValid').val()),
-      amnt = ($('#regAmount').val());
+$("#submitBtn").click(async function() {
+  var name = $("#regName").val(),
+    summary = $("#regTitle").val(),
+    cpnCode = $("#regValue").val(),
+    siteUrl = $("#regUrl").val();
+  (noUses = $("#regUses").val()),
+    (validFr = $("#regValid").val()),
+    (amnt = $("#regAmount").val());
 
   couponArray.push({
-    userName : name,
-    couponValue : cpnCode,
-    couponTitle : summary,
-    amount : amnt,
-    validity : validFr,
-    uses : noUses,
-    index : couponArray.length+1
-    })
+    userName: name,
+    couponValue: cpnCode,
+    couponTitle: summary,
+    amount: amnt,
+    validity: validFr,
+    uses: noUses,
+    index: couponArray.length + 1
+  });
   renderCoupons();
 });
