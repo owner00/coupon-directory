@@ -41,8 +41,7 @@ payable contract CouponDirectory =
       let updatedCouponDirectory = state.coupons{ [index].noOfPurchases = purchaseTimes }
       put(state{ coupons = updatedCouponDirectory })      
     else
-      abort("Coupon no longer available!")
-`;
+      abort("Coupon no longer available!")`;
 
 const contractAddress = "ct_2T4562sqNRsQze6hbNuscg7vx31GNuPAn2cTsyRB4y2AF7n4eV";
 var client = null;
