@@ -7,7 +7,7 @@
         couponValue : string,
         couponUrl : string,
         noOfUses : int,
-        validityPeriod : int
+        validityPeriod : int,
         amount : int,
         noOfPurchases : int }
             
@@ -34,10 +34,10 @@
             
     payable stateful entrypoint buyCoupon(index : int) =
       let coupon = getCoupon(index)
-        if(coupon.noOfPurchases < coupon.noOfUses)
-            Chain.spend(coupon.userAddress, coupon.amount)
-            let purchaseTimes = coupon.noOfPurchases + 1
-            let updatedCouponDirectory = state.coupons{ [index].noOfPurchases = purchaseTimes }
-            put(state{ coupons = updatedCouponDirectory })      
-        else
-            abort("Coupon no longer available!")
+      if(coupon.noOfPurchases < coupon.noOfUses)
+        Chain.spend(coupon.userAddress, coupon.amount)
+        let purchaseTimes = coupon.noOfPurchases + 1
+        let updatedCouponDirectory = state.coupons{ [index].noOfPurchases = purchaseTimes }
+        put(state{ coupons = updatedCouponDirectory })      
+      else
+        abort("Coupon no longer available!")

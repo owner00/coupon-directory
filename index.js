@@ -1,47 +1,47 @@
 const contractSource = `
-  payable contract CouponDirectory =
+payable contract CouponDirectory =
     
-    record coupon = 
-      { userAddress : address,
-        userName : string,
-        couponTitle : string,
-        couponValue : string,
-        couponUrl : string,
-        noOfUses : int,
-        validityPeriod : int
-        amount : int,
-        noOfPurchases : int }
+record coupon = 
+  { userAddress : address,
+    userName : string,
+    couponTitle : string,
+    couponValue : string,
+    couponUrl : string,
+    noOfUses : int,
+    validityPeriod : int,
+    amount : int,
+    noOfPurchases : int }
+        
+record state =
+  { coupons      : map(int, coupon),
+    totalCoupons : int }
+        
+entrypoint init() =
+  { coupons = {},
+    totalCoupons = 0 }
+        
+entrypoint getCoupon(index : int) : coupon =
+   switch(Map.lookup(index, state.coupons))
+     None    => abort("Sorry, there is no such coupon!")
+     Some(x) => x
             
-    record state =
-      { coupons      : map(int, coupon),
-        totalCoupons : int }
-            
-    entrypoint init() =
-      { coupons = {},
-        totalCoupons = 0 }
-            
-    entrypoint getCoupon(index : int) : coupon =
-       switch(Map.lookup(index, state.coupons))
-         None    => abort("Sorry, there is no such coupon!")
-         Some(x) => x
-                
-    stateful entrypoint registerCoupon( usrName : string, cpnTitle : string, cpnValue : string, cpnUrl : string, noUses : int, vldPeriod : int, amt : int) =
-      let coupon = { userAddress = Call.caller, userName = usrName, couponTitle = cpnTitle, couponValue = cpnValue, couponUrl = cpnUrl, noOfUses = noUses, validityPeriod = vldPeriod, amount = amt, noOfPurchases = 0}
-      let index = getTotalCoupons() + 1
-      put(state{ coupons[index] = coupon, totalCoupons = index })
-            
-    entrypoint getTotalCoupons() : int =
-      state.totalCoupons
-            
-    payable stateful entrypoint buyCoupon(index : int) =
-      let coupon = getCoupon(index)
-        if(coupon.noOfPurchases < coupon.noOfUses)
-            Chain.spend(coupon.userAddress, coupon.amount)
-            let purchaseTimes = coupon.noOfPurchases + 1
-            let updatedCouponDirectory = state.coupons{ [index].noOfPurchases = purchaseTimes }
-            put(state{ coupons = updatedCouponDirectory })      
-        else
-            abort("Coupon no longer available!")
+stateful entrypoint registerCoupon( usrName : string, cpnTitle : string, cpnValue : string, cpnUrl : string, noUses : int, vldPeriod : int, amt : int) =
+  let coupon = { userAddress = Call.caller, userName = usrName, couponTitle = cpnTitle, couponValue = cpnValue, couponUrl = cpnUrl, noOfUses = noUses, validityPeriod = vldPeriod, amount = amt, noOfPurchases = 0}
+  let index = getTotalCoupons() + 1
+  put(state{ coupons[index] = coupon, totalCoupons = index })
+        
+entrypoint getTotalCoupons() : int =
+  state.totalCoupons
+        
+payable stateful entrypoint buyCoupon(index : int) =
+  let coupon = getCoupon(index)
+  if(coupon.noOfPurchases < coupon.noOfUses)
+    Chain.spend(coupon.userAddress, coupon.amount)
+    let purchaseTimes = coupon.noOfPurchases + 1
+    let updatedCouponDirectory = state.coupons{ [index].noOfPurchases = purchaseTimes }
+    put(state{ coupons = updatedCouponDirectory })      
+  else
+    abort("Coupon no longer available!")
 `;
 
 const contractAddress = "ct_2T4562sqNRsQze6hbNuscg7vx31GNuPAn2cTsyRB4y2AF7n4eV";
