@@ -43,15 +43,15 @@ payable contract CouponDirectory =
     else
       abort("Coupon no longer available!")`;
 
-const contractAddress = "ct_2T4562sqNRsQze6hbNuscg7vx31GNuPAn2cTsyRB4y2AF7n4eV";
+const contractAddress = "ct_2tmBSgrY5WNVaWFh2Fk3CG8RdUirhC8ezkkffNVUZd4ssgbg7o";
 var client = null;
 var couponArray = [];
 var couponsLength = 0;
 
 function renderCoupons() {
-  couponArray = couponArray.sort(function(a, b) {
-    return a.uses - b.uses;
-  });
+  // couponArray = couponArray.sort(function(a, b) {
+  //   return a.uses - b.uses;
+  // });
   var template = $("#template").html();
   Mustache.parse(template);
   var rendered = Mustache.render(template, { couponArray });
