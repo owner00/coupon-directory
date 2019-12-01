@@ -58,26 +58,61 @@ function renderCoupons() {
   $("#couponBody").html(rendered);
 }
 
-window.addEventListener("load", async () => {
-  $("#loader").show();
-
-  client = await Ae.Aepp();
+async function callStatic(func, args) {
 
   const contract = await client.getContractInstance(contractSource, {
     contractAddress
   });
-  const calledGet = await contract
-    .call("getTotalCoupons", [], { callStatic: true })
-    .catch(e => console.error(e));
-  console.log("calledGet", calledGet);
+
+  const calledGet = await contract.call(func, args, {
+    callStatic: true
+  }).catch(e => console.error(e));
 
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
-  console.log("decodedGet", decodedGet);
+
+  return decodedGet;
+}
+
+async function contractCall(func, args, value) {
+  const contract = await client.getContractInstance(contractSource, {
+    contractAddress
+  });
+  //Make a call to write smart contract func, with aeon value input
+  const calledSet = await contract.call(func, args, {
+    amount: value
+  }).catch(e => console.error(e));
+
+  return calledSet;
+}
+
+
+
+window.addEventListener("load", async () => {
+  $("#loader").show();
+
+  client = await Ae.Aepp();
+  
+  couponLength = await callStatic('getTotalCoupons', []);
+
+
+  for (let i = 1; i <= couponLength; i++) {
+    const coupons = await callStatic('getCoupon', [i]);
+
+    couponArray.push({
+      userName: coupons.userName,
+      couponValue: coupons.couponValue,
+      couponTitle: coupons.couponTitle,
+      amount: coupons.amount,
+      validity: coupons.validityPeriod,
+      uses: coupons.noOfUses,
+      index: couponArray.length + 1
+    });
+
 
   renderCoupons();
 
   $("#loader").hide();
-});
+}});
 
 jQuery("#couponBody").on("click", ".getBtn", async function(event) {
   const dataIndex = event.target.id;
