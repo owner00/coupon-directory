@@ -118,9 +118,9 @@ jQuery("#couponBody").on("click", ".getBtn", async function(event) {
   const dataIndex = event.target.id;
   const foundIndex = couponArray.findIndex(coupon => coupon.index == dataIndex);
   if (couponArray[foundIndex].uses < 1) {
-    alert("Coupon no longer available!");
+    console.log("Coupon no longer available!");
   } else {
-    alert(couponArray[foundIndex].couponValue);
+    console.log(couponArray[foundIndex].couponValue);
     couponArray[foundIndex].uses = couponArray[foundIndex].uses - 1;
     renderCoupons();
   }
