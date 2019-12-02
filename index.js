@@ -117,14 +117,23 @@ window.addEventListener("load", async () => {
 jQuery("#couponBody").on("click", ".getBtn", async function(event) {
   const dataIndex = event.target.id;
   const foundIndex = couponArray.findIndex(coupon => coupon.index == dataIndex);
+  
+  buy = await callStatic('getCoupon', [dataIndex])
   if (couponArray[foundIndex].uses < 1) {
     console.log("Coupon no longer available!");
   } else {
     console.log(couponArray[foundIndex].couponValue);
     couponArray[foundIndex].uses = couponArray[foundIndex].uses - 1;
+    await contractCall('buyCoupon', [dataIndex], buy.amount )
     renderCoupons();
   }
 });
+
+
+
+
+
+
 
 $("#submitBtn").click(async function() {
   var name = $("#regName").val(),
