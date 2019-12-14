@@ -1,6 +1,5 @@
 body{
     background-color: wheat;
-    padding: 1em;
 }
 
 .div-center{
@@ -47,4 +46,10 @@ img{
     padding-top: 0.5em;
     background-color: #F5F5F5;
     border: 0.5em solid #F5F5F5;
+}
+
+.container{
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
 }
