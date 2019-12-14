@@ -41,7 +41,8 @@ payable contract CouponDirectory =
       let updatedCouponDirectory = state.coupons{ [index].noOfPurchases = purchaseTimes }
       put(state{ coupons = updatedCouponDirectory })      
     else
-      abort("Coupon no longer available!")`;
+      abort("Coupon no longer available!")
+`;
 
 const contractAddress = "ct_2tmBSgrY5WNVaWFh2Fk3CG8RdUirhC8ezkkffNVUZd4ssgbg7o";
 var client = null;
@@ -59,62 +60,51 @@ function renderCoupons() {
 }
 
 async function callStatic(func, args) {
-
-  const contract = await client.getContractInstance(contractSource, {
-    contractAddress
-  });
-
-  const calledGet = await contract.call(func, args, {
-    callStatic: true
-  }).catch(e => console.error(e));
-
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
+  const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
   const decodedGet = await calledGet.decode().catch(e => console.error(e));
 
   return decodedGet;
 }
 
 async function contractCall(func, args, value) {
-  const contract = await client.getContractInstance(contractSource, {
-    contractAddress
-  });
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
   //Make a call to write smart contract func, with aeon value input
-  const calledSet = await contract.call(func, args, {
-    amount: value
-  }).catch(e => console.error(e));
+  const calledSet = await contract.call(func, args, {amount: value}).catch(e => console.error(e));
 
   return calledSet;
 }
 
-
-
-window.addEventListener("load", async () => {
+window.addEventListener('load', async () => {
   $("#loader").show();
 
   client = await Ae.Aepp();
   
   couponLength = await callStatic('getTotalCoupons', []);
 
-
   for (let i = 1; i <= couponLength; i++) {
     const coupons = await callStatic('getCoupon', [i]);
 
     couponArray.push({
-      userName: coupons.userName,
-      couponValue: coupons.couponValue,
-      couponTitle: coupons.couponTitle,
-      amount: coupons.amount,
-      validity: coupons.validityPeriod,
-      uses: coupons.noOfUses,
-      index: couponArray.length + 1
-    });
-
-
+      usrName: coupons.userName,
+      cpnValue: coupons.couponValue,
+      cpnTitle: coupons.couponTitle,
+      amnt: coupons.amount,
+      vldy: coupons.validityPeriod,
+      uss: coupons.noOfUses,
+      indx: couponArray.length + 1
+    })
+  }
+      
   renderCoupons();
 
   $("#loader").hide();
 }});
 
 jQuery("#couponBody").on("click", ".getBtn", async function(event) {
+  $("#loader").show();
+    
+  const value = $(this).siblings('input').val();
   const dataIndex = event.target.id;
   const foundIndex = couponArray.findIndex(coupon => coupon.index == dataIndex);
   
@@ -129,29 +119,29 @@ jQuery("#couponBody").on("click", ".getBtn", async function(event) {
   }
 });
 
-
-
-
-
-
-
 $("#submitBtn").click(async function() {
-  var name = $("#regName").val(),
-    summary = $("#regTitle").val(),
-    cpnCode = $("#regValue").val(),
-    siteUrl = $("#regUrl").val();
-  (noUses = $("#regUses").val()),
-    (validFr = $("#regValid").val()),
-    (amnt = $("#regAmount").val());
-
+  $("#loader").show();
+    
+  const name = ($("#regName").val()),
+      summary = ($("#regTitle").val()),
+      cpnCode = ($("#regValue").val()),
+      siteUrl = ($("#regUrl").val()),
+      noUses = ($("#regUses").val()),
+      validFr = ($("#regValid").val()),
+      amont = ($("#regAmount").val());
+    
+   await contractCall('registerCoupon', [name, summary, cpnCode, siteUrl, noUses, validFr, amont], 0);
+    
   couponArray.push({
-    userName: name,
-    couponValue: cpnCode,
-    couponTitle: summary,
-    amount: amnt,
-    validity: validFr,
-    uses: noUses,
-    index: couponArray.length + 1
+    usrName: name,
+    cpnValue: cpnCode,
+    cpnTitle: summary,
+    amnt: amont,
+    vldy: validFr,
+    uss: noUses,
+    indx: couponArray.length + 1
   });
   renderCoupons();
+    
+  $("#loader").hide();
 });
